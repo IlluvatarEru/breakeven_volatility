@@ -1,5 +1,0 @@
-class volatility
-{
-	public:
-	private:
-}
