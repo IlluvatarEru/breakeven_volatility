@@ -24,6 +24,7 @@ namespace BEV
 	bool operator==(const struct std::tm& lhs, const struct std::tm& rhs);
 	bool operator>( struct std::tm& lhs, struct std::tm& rhs);
 	bool operator<( struct std::tm& lhs, struct std::tm& rhs);
+	bool operator<=( struct std::tm& lhs, struct std::tm& rhs);
 	
 	namespace TSH
 	{
@@ -42,6 +43,7 @@ namespace BEV
 				explicit tsh(std::string udl, std::ifstream& csvf);
 				explicit tsh::tsh(std::string udl,std::size_t l);
 				explicit tsh::tsh(std::string udl);
+				//explicit tsh::tsh(tsh& other_tsh);
 				virtual tsh::~tsh();
 				
 				/* getters */
@@ -50,7 +52,7 @@ namespace BEV
 				int tsh::get_pos(struct std::tm day);
 				std::vector<double> tsh::get_data();
 				std::vector<struct std::tm> tsh::get_dates();
-				struct std::tm tsh::get_date(int i);
+				struct std::tm tsh::get_date(size_t i);
 				double tsh::operator[](std::size_t i) const;
 				
 				/* setters */

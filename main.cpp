@@ -36,28 +36,19 @@ namespace BEV{
 			std::vector<struct std::tm> mydates =spx.get_dates();
 			//struct std::tm t1 =  {};//mydates[5];
 			struct std::tm t2 =  {};//mydates[122];
-			struct std::tm t1 = {};
-			t1.tm_year = 2015 - 1900;
-			t1.tm_mon = 5;
-			t1.tm_mday = 6;
-			t1.tm_hour = 0;    //  To avoid any doubts about summer time, etc.
-			mktime( &t1 );
-			t2.tm_year = 2015 - 1900;
-			t2.tm_mon = 5 ;
-			t2.tm_mday = 16;
-			t2.tm_hour = 0;    //  To avoid any doubts about summer time, etc.
-			mktime( &t2 );
 			
-			std::cout << "T1<T2 " << t2.tm_mday-t1.tm_mday <<std::endl;
-			std::cout << "diff " << time_diff(mydates[15],mydates[5]) <<std::endl;
-			option c(0.3,1200,mydates[400],spx,0.05,0, "Call", "SPX");
+			
+			option c(0.9,2700,mydates[365],spx,0.01,0, "Call", "SPX");
 			c.set_delta_hedging("daily");
-			double pnl = c.delta_hedging_pnl(mydates[1],mydates[365]);
-			std::cout << pnl <<std::endl;
+			std::cout << "TRU FALSE "<<(c.get_spot().is_in(c.get_maturity())) <<std::endl;
+			double pnl = c.delta_hedging_pnl(mydates[1],c.get_maturity());
+			std::cout << "My Pnl is " << pnl <<std::endl;
+			
 			std::vector<double> strikes = {100,110,120};
-			v_skew::volatility_skew vs(10,strikes);
-			double mystrike = 110;
-			std::cout << vs.get_volatility(mystrike) << std::endl;
+			//v_skew::volatility_skew v=c.get_volatility_skew(mydates[1],mydates[365],strikes, "BE_vol");
+			//std::cout << pnl <<std::endl;
+			
+			
 			//daily_delta_hedging_pnl
 			//double toto=spx.get_data()[spx.get_pos(day)];
 			//std::cout << c.compute_price(day) << std::endl;
@@ -66,7 +57,8 @@ namespace BEV{
 			//double t2 = p.get_price();
 			//std::cout << t1 << std::endl;
 			//std::cout << t2 << std::endl;
-			//pf::portfolio Mypf;
+			
+			//portfolio Mypf(c,mydates[15],mydates[155]);
 			//Mypf.add_instrument(c,0);
 			//Mypf.add_instrument(p,1);
 			//std::cout << "MAIN ID IS " << c.GetUid() << std::endl;

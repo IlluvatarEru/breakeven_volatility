@@ -6,6 +6,7 @@
 #include <string>
 #include <math.h>
 #include <atomic>
+#include <cmath>
 
 namespace BEV{
 
@@ -74,6 +75,7 @@ namespace BEV{
 			double option::get_strike() const;
 			double option::get_spot(struct std::tm day);
 			double option::get_interestrate() const;
+			TSH::tsh option::get_spot();
 			
 			/* setters */
 			void option::set_delta_hedging(std::string hedge_type);
@@ -82,13 +84,15 @@ namespace BEV{
 			double option::compute_price(struct std::tm day);
 			double option::delta_hedging_pnl(struct std::tm start, struct std::tm end);
 			double option::daily_delta_hedging_pnl(struct std::tm start, struct std::tm end);
-			
-			double option::get_delta(struct std::tm day);
+			double option::daily_delta_hedging_pnl(struct std::tm start, struct std::tm end, double vol, double strike);
+
+			double option::get_delta(struct std::tm day,double vol, double strike);
 			double option::get_rf_return(struct std::tm start,struct std::tm end);
 			double option::payoff(struct std::tm day);
-			v_skew::volatility_skew option::get_volatility_skew(struct std::tm day, std::vector<double> strikes,std::string vol_type);
-			std::vector<double>  get_BE_vol(struct std::tm day, std::vector<double> strikes);
-			double get_BE_vol(struct std::tm day, double strike);
+			
+			v_skew::volatility_skew option::get_volatility_skew(struct std::tm start, struct std::tm end, std::vector<double> strikes,std::string vol_type);
+			std::vector<double>  option::get_BE_vol(struct std::tm start, struct std::tm end, std::vector<double> strikes,double lb=0,double hb=1, double tol=1);
+			double option::get_BE_vol(struct std::tm start, struct std::tm end, double strike, double lb=0,double hb=1, double tol=100);
 			
 		private:
 		

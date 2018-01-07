@@ -7,6 +7,10 @@
 
 namespace BEV
 {
+	
+	
+	namespace pf
+	{
 		
 		class instrument_holder{
 			
@@ -24,24 +28,22 @@ namespace BEV
 		{
 			public:
 				
-				explicit portfolio::portfolio(option opt, struct std::tm start, struct std::tm end);
+				explicit portfolio::portfolio(std::string pf_name);
+				portfolio::portfolio(std::string pf_name, std::vector<instrument_holder> InstrumentsHolder);
 				portfolio::~portfolio();
-				
-				v_skew::volatility_skew portfolio::get_skew(std::vector<double> strikes);
-				/*void portfolio::add_instrument(instrument inst,TSH::tsh quantity);
+				void portfolio::add_instrument(instrument inst,TSH::tsh quantity);
 				int portfolio::get_pos(instrument instr);
 				std::size_t portfolio::get_number_of_instruments();
 				double portfolio::get_quantity(instrument inst);
 				std::vector<double> portfolio::get_prices();
-				double portfolio::compute_value();*/
+				double portfolio::compute_value();
 				
 			private:
-				double m_pnl;
-				struct std::tm m_start;
-				struct std::tm m_end;
-				option* m_option;
-				// vs_skew::volatility_skew vsk;
+				TSH::tsh m_pnl;
+				std::vector<instrument_holder> m_InstrumentsHolder;
+				
 		};
+	}
 }
 
 #endif

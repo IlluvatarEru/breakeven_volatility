@@ -23,21 +23,8 @@ namespace BEV{
 		}
 		
 		portfolio::portfolio(option opt, struct std::tm start, struct std::tm end)
-		: m_start(start), m_end(end), m_option(&opt) 
+		: m_start(start), m_end(end), m_option(&opt), 
 		{
-			
-			struct std::tm t1 = opt.get_spot().get_date(0);
-			struct std::tm t2 = opt.get_spot().get_date(opt.get_spot().get_size()-1);
-			if(t1> start)
-			{
-				std::cout << "Start date not in data" << std::endl;
-				m_start = t1;
-			}
-			if(t2 < end)
-			{
-				std::cout << "End date not in data" << std::endl;
-				m_end = t2;
-			}
 			std::cout << "pf constructor" << std::endl;
 		}
 		
@@ -46,10 +33,6 @@ namespace BEV{
 			std::cout << "portfolio destructor" << std::endl;
 		}
 		
-		v_skew::volatility_skew portfolio::get_skew(std::vector<double> strikes)
-		{
-			return m_option->get_volatility_skew(m_start,m_end,strikes,"BE_vol");
-		} 
 		
 		
 		/*void portfolio::add_instrument(instrument inst,TSH::tsh quantity)
@@ -113,7 +96,7 @@ namespace BEV{
 				pf_value += n;
 			}
 			return pf_value;
-		}
+		}*/
 
-	}*/
+
 }

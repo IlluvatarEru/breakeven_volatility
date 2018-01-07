@@ -8,7 +8,6 @@ namespace BEV{
 	/************************************************
 	****************** Instrument	*****************
 	*************************************************/
-	
 	/* operator to compare if two instruments are the same */
 	bool operator ==(const instrument inst1, const instrument inst2)
 	{
@@ -77,7 +76,6 @@ namespace BEV{
 	const double div, const std::string& optiontype, const std::string& udl)
 	: instrument(udl,div), m_volatility(vol), m_strike(strike), m_maturity(mat), m_spot(spot), m_interestrate(rate),  m_type(optiontype)
 	{
-		//instrument::set_price(compute_price());
 		std::cout<<"option constructor"<<std::endl;
 	}
 	
@@ -111,6 +109,10 @@ namespace BEV{
     {
         return m_interestrate;
     }
+	TSH::tsh option::get_spot()
+	{
+		return m_spot;
+	}
 	
 	/* setters */
 	void option::set_delta_hedging(std::string hedge_type)
@@ -145,7 +147,7 @@ namespace BEV{
 	
 	double option::delta_hedging_pnl(struct std::tm start, struct std::tm end)
 	{
-		if(m_spot.is_in(start) && m_spot.is_in(end) && (start<end) && (end<m_maturity))
+		if(m_spot.is_in(start) && m_spot.is_in(end) && (start<end) && (end<=m_maturity))
 		{
 			if(m_hedge_type=="daily")
 			{
@@ -171,33 +173,60 @@ namespace BEV{
 	
 	double option::daily_delta_hedging_pnl(struct std::tm start, struct std::tm end)
 	{
+		double pnl = -compute_price(start);
+		double vol = get_volatility();
+		double strike = get_strike();
+		for(size_t i=m_spot.get_pos(start);i<m_spot.get_pos(end)-1;++i)
+		{
+			struct std::tm day = m_spot.get_date(i-1);
+			pnl-=get_delta(day, vol, strike)*(m_spot[i]-m_spot[i-1]);
+		}
+		return pnl + payoff(end);
+	}
+	/*{
+		double vol = get_volatility();
+		double strike = get_strike();
 		struct std::tm day = start;
 		struct std::tm prev_day;
 		int end_pos = m_spot.get_pos(end);
 		int start_pos = m_spot.get_pos(start);
 		double pf_value = compute_price(day);
-		double delta = get_delta(day);
+		double delta = get_delta(day,vol,strike);
 		double risk_free = pf_value - delta * m_spot[m_spot.get_pos(day)];
 		
-		for(int i=start_pos;i<end_pos-1;++i)
+		for(size_t i=start_pos;i<end_pos-1;++i)
 		{
 			prev_day = day;
 			day = m_spot.get_date(i);
 			pf_value += delta * (m_spot[i]-m_spot[m_spot.get_pos(prev_day)]) 
 				+ risk_free * (get_rf_return(prev_day,day)-1);
-			double delta = get_delta(day);
+			double delta = get_delta(day,vol,strike);
 			risk_free = pf_value - delta * m_spot[i];
 		}
 		return pf_value - payoff(day);
 	}
+*/	
+	double option::daily_delta_hedging_pnl(struct std::tm start, struct std::tm end, double vol, double strike)
+	{
+		double pnl = -compute_price(start);
+		
+		for(size_t i=m_spot.get_pos(start);i<m_spot.get_pos(end)-1;++i)
+		{
+			struct std::tm day = m_spot.get_date(i-1);
+			double delta = get_delta(day, vol, strike);
+			pnl-=delta*(m_spot[i]-m_spot[i-1])
+				+(compute_price(day)-delta*m_spot[i])*(get_rf_return(prev_day,day)-1);
+		}
+		return pnl + payoff(end);
+	}
 	
-	double option::get_delta(struct std::tm day)
+	double option::get_delta(struct std::tm day,double vol, double strike)
 	{
 		if(m_spot.is_in(day))
 		{
 			double TimeToMaturity = time_diff(m_maturity, day);
 			double spot = m_spot.get_pos(day);
-			double d1 = (log(spot/m_strike) + (m_interestrate + 0.5*m_volatility*m_volatility)*TimeToMaturity)/(m_volatility*pow(TimeToMaturity,0.5));
+			double d1 = (log(spot/strike) + (m_interestrate + 0.5*vol*vol)*TimeToMaturity)/(vol*pow(TimeToMaturity,0.5));
 			if(m_type=="Call")
 			{
 				return norm_cdf(d1);
@@ -237,29 +266,47 @@ namespace BEV{
 		
 	}
 	
-	v_skew::volatility_skew option::get_volatility_skew(struct std::tm day, std::vector<double> strikes, std::string vol_type)
+	v_skew::volatility_skew option::get_volatility_skew(struct std::tm start, std::vector<double> strikes, std::string vol_type)
 	{
-		if(vol_type==BE_vol)
+		if(vol_type=="BE_vol")
 		{
-			std::vector<double> BE_vol = get_BE_vol(day,strikes);
-			return v_skew::volatility_skew(time_diff(m_maturity,day), strikes,BE_vol);
+			std::vector<double> BE_vol = get_BE_vol(start, strikes);
+			return v_skew::volatility_skew(time_diff(m_maturity,start), strikes,BE_vol);
 		}
 		else
 		{
 			std::vector<double> constant_vol(strikes.size(), m_volatility);
-			return v_skew::volatility_skew(time_diff(m_maturity,day), strikes,constant_vol);
+			return v_skew::volatility_skew(time_diff(m_maturity,start), strikes,constant_vol);
 		}
 	}
-	std::vector<double>  get_BE_vol(struct std::tm day, std::vector<double> strikes)
+	std::vector<double>  option::get_BE_vol(struct std::tm start, std::vector<double> strikes, double lb, double hb, double tol)
 	{
 		std::vector<double> vol(strikes.size(),0);
-		
+		for(int i=0;i<strikes.size();++i)
+		{
+			vol[i] = get_BE_vol(start,m_maturity,strikes[i]);
+		}
+		return vol;
 	}
 	
-	double get_BE_vol(struct std::tm day, double strike)
+	double option::get_BE_vol(struct std::tm start, double strike, double lb, double hb, double tol)
 	{
-		pnl = daily_delta_hedging_pnl(day,);
-		
+		double vol = get_volatility();
+		double pnl = daily_delta_hedging_pnl(start,m_maturity,vol,strike);
+		while (std::abs(pnl) >tol)
+		{
+			std::cout << "Pnl is " <<pnl << std::endl;
+			if(pnl >0)
+			{
+				vol = (vol + lb)/2;
+			}
+			else
+			{
+				vol = (vol + hb)/2;
+			}
+			pnl = daily_delta_hedging_pnl(start,m_maturity,vol,strike);
+		}
+		return vol;
 	}
 	
 	

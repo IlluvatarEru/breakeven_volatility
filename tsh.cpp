@@ -19,6 +19,11 @@ namespace BEV
 		return (time_diff(lhs,rhs)<0);
 	}
 	
+	bool operator<=( struct std::tm& lhs, struct std::tm& rhs)
+	{
+		return (time_diff(lhs,rhs)<=0);
+	}
+	
 	/* Method to substract two std:: tm variables */
 	double time_diff(struct std::tm& t1, struct std::tm& t2)
 	{
@@ -67,6 +72,10 @@ namespace BEV
 			m_data.resize(1);
 		}
 		
+		/*tsh::tsh(tsh& other_tsh)
+		: m_udl(other_tsh.get_udl()),m_dates(other_tsh.get_dates()),m_data(other_tsh.get_data())
+		{}*/
+		
 		tsh::~tsh()
 		{
 			std::cout << "tsh destructor" <<std::endl;
@@ -94,7 +103,7 @@ namespace BEV
 			return m_dates;
 		}
 		
-		struct std::tm tsh::get_date(int i)
+		struct std::tm tsh::get_date(size_t i)
 		{
 			return m_dates[i];
 		}
