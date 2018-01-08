@@ -29,9 +29,19 @@ namespace BEV{
 	}
 	
 	/* getters */
+	std::string instrument::get_udl() const
+	{
+		return m_udl;
+	}
+	
 	double instrument::get_price() const
 	{
 		return m_price;
+	}
+	
+	double instrument::get_dividend_yield() const
+	{
+		return m_dividendyield;
 	}
 	
 	int instrument::GetUid() const
@@ -73,8 +83,8 @@ namespace BEV{
 	
 	/* constructors and destrucor */
 	option::option(const double vol, const double strike, const struct std::tm mat, TSH::tsh spot, const double rate, 
-	const double div, const std::string& optiontype, const std::string& udl)
-	: instrument(udl,div), m_volatility(vol), m_strike(strike), m_maturity(mat), m_spot(spot), m_interestrate(rate),  m_type(optiontype)
+	const double div, const std::string& optiontype, const std::string& udl, const std::string& hedge_type)
+	: instrument(udl,div), m_volatility(vol), m_strike(strike), m_maturity(mat), m_spot(spot), m_interestrate(rate),  m_type(optiontype), m_hedge_type(hedge_type)
 	{
 		std::cout<<"option constructor"<<std::endl;
 	}
@@ -85,6 +95,11 @@ namespace BEV{
     }
 	
 	/* getters */
+	std::string option::get_type() const
+	{
+		return m_type;
+	}
+	
 	struct std::tm option::get_maturity() const 
     {
         return m_maturity;
@@ -100,7 +115,7 @@ namespace BEV{
         return m_strike;
     }
 	
-	double option::get_spot(struct std::tm day)
+	double option::get_spot(struct std::tm day) const
 	{
 		return m_spot[m_spot.get_pos(day)];
 	}
@@ -109,16 +124,22 @@ namespace BEV{
     {
         return m_interestrate;
     }
-	TSH::tsh option::get_spot()
+	TSH::tsh option::get_spot() const
 	{
 		return m_spot;
 	}
 	
 	/* setters */
+	void option::set_volatility(double vol)
+	{
+		m_volatility = vol;
+	}
+	
 	void option::set_maturity(struct std::tm maturity)
 	{
 		m_maturity = maturity;
 	}
+	
 	void option::set_delta_hedging(std::string hedge_type)
 	{
 		std::vector<std::string> mylist{"unhedged", "daily"};
@@ -139,6 +160,7 @@ namespace BEV{
 		double vol = get_volatility();
 		return compute_price(day,vol);
 	}
+	
 	double option::compute_price(struct std::tm day, double vol)
 	{
 		double spot = get_spot(day);
@@ -185,49 +207,55 @@ namespace BEV{
 	{
 		double vol = get_volatility();
 		double strike = get_strike();
-		return daily_delta_hedging_pnl(start,end,vol,strike);
+		struct std::tm mat = get_maturity();
+		return daily_delta_hedging_pnl(start,end,mat,vol,strike);
 	}
 	
-	double option::daily_delta_hedging_pnl(struct std::tm start, struct std::tm end, double vol, double strike)
-	{
-		/*double pnl = -compute_price(start);
-		for(size_t i=m_spot.get_pos(start)+1;i<m_spot.get_pos(end);++i)
-		{
-			
-			struct std::tm day = m_spot.get_date(i-1);
-			double delta = get_delta(day, vol, strike);
-			pnl-=delta*(m_spot[i]-m_spot[i-1]);
-				//+(compute_price(day)-delta*m_spot[i])*(get_rf_return(prev_day,day)-1);
-		}
-		return pnl + payoff();*/
-		
-		double TmT = time_diff(m_maturity,start);
+	double option::daily_delta_hedging_pnl(struct std::tm start, struct std::tm end, struct std::tm mat, double vol, double strike)
+	{	
+		double TmT = time_diff(mat,start);
 		double pnl = compute_price(start,vol);
-		double pos_in_stock = get_delta(start,vol,strike);
+		double pos_in_stock = get_delta(start,mat,vol,strike);
 		double pos_in_rf = pnl - get_spot(start) * pos_in_stock;
 		std::vector<struct std::tm> dates = m_spot.get_dates();
 		
 		for(size_t i=m_spot.get_pos(start)+1;i<m_spot.get_pos(end);++i)
 		{
-			TmT = time_diff(m_maturity,dates[i]);
+			TmT = time_diff(mat,dates[i]);
 			
 			pnl+= pos_in_stock * (m_spot[i]-m_spot[i-1]) + pos_in_rf * (get_rf_return(dates[i],dates[i-1])-1);
 			
 			if(TmT!=0)
-				pos_in_stock = get_delta(dates[i],vol,strike);
+				pos_in_stock = get_delta(dates[i],mat,vol,strike);
 			
 			pos_in_rf = pnl- pos_in_stock * m_spot[i];
 		}
 		
-		return pnl - payoff();
+		return pnl - payoff(mat);
 	}
 	
-	double option::get_delta(struct std::tm day,double vol, double strike)
+	double option::get_gamma(struct std::tm day,  struct std::tm mat, double vol, double strike)
+	{
+		if(m_spot.is_in(day))
+		{
+			double spot = m_spot[m_spot.get_pos(day)];
+			double TimeToMaturity = time_diff(mat, day)/365;
+			double d1 = ((log(spot/strike) + (m_interestrate + 0.5*vol*vol)*TimeToMaturity))/(vol*pow(TimeToMaturity,0.5));
+			
+			return norm_pdf(d1) / (spot*vol*pow(TimeToMaturity,0.5));
+		}
+		else
+		{
+			std::cout << "Invalid date" << std::endl;
+			return 0;
+		}
+	}
+	double option::get_delta(struct std::tm day, struct std::tm mat, double vol, double strike)
 	{
 		if(m_spot.is_in(day))
 		{
 			
-			double TimeToMaturity = time_diff(m_maturity, day)/365;
+			double TimeToMaturity = time_diff(mat, day)/365;
 			double spot = m_spot[m_spot.get_pos(day)];
 			double d1 = ((log(spot/strike) + (m_interestrate + 0.5*vol*vol)*TimeToMaturity))/(vol*pow(TimeToMaturity,0.5));
 			if(m_type=="Call")
@@ -251,15 +279,15 @@ namespace BEV{
 		}
 	}
 	
-	double option::payoff()
+	double option::payoff(struct std::tm mat)
 	{
 		if(m_type=="Call")
 		{
-			return std::max(0.0, m_spot[m_spot.get_pos(m_maturity)]-m_strike);
+			return std::max(0.0, m_spot[m_spot.get_pos(mat)]-m_strike);
 		}
 		else if(m_type=="Put")
 		{
-			return std::max(0.0, m_strike-m_spot[m_spot.get_pos(m_maturity)]); 
+			return std::max(0.0, m_strike-m_spot[m_spot.get_pos(mat)]); 
 		}
 		else
 		{
@@ -317,7 +345,6 @@ namespace BEV{
 	
 	std::vector<double>  option::get_BE_vol(struct std::tm start, std::vector<double> strikes, double lb, double hb, double tol)
 	{
-		std::cout << "HERE 2 " << std::endl;
 		std::vector<double> vol(strikes.size(),0);
 		for(size_t i=0;i<strikes.size();++i)
 		{
@@ -325,60 +352,115 @@ namespace BEV{
 		}
 		return vol;
 	}
+	
 	double option::get_BE_vol(struct std::tm start, double strike, struct std::tm mat, double lb, double hb, double tol)
 	{
-		double vol = (hb+lb)/2;
-		double pnl = daily_delta_hedging_pnl(start,mat,vol,strike);
-		int i=0;
-		pnl = daily_delta_hedging_pnl(start,mat,lb,strike);
-		pnl = daily_delta_hedging_pnl(start,mat,hb,strike);
-		double toto = daily_delta_hedging_pnl(start,mat,lb,strike)*daily_delta_hedging_pnl(start,mat,hb,strike);
-		if(toto>0)
+		if(m_spot.is_in(start) && m_spot.is_in(mat) && (start<mat))
 		{
-				std::cout<< "Error" << std::endl;
+			double vol = (hb+lb)/2;
+			double pnl = daily_delta_hedging_pnl(start,mat,mat,vol,strike);
+			int i=0;
+			
+			double pnl_lb = daily_delta_hedging_pnl(start,mat,mat,lb,strike);
+			double pnl_hb = daily_delta_hedging_pnl(start,mat,mat,hb,strike);
+			
+			if(pnl_lb*pnl_hb>0)
+			{
+					std::cout<< "Error on lower and upper bounds for dichotomy method." << std::endl;
+			}
+			
+			while (std::abs(pnl) > tol)
+			{
+				if(pnl <0)
+				{
+					lb = vol;
+				}
+				else
+				{
+					hb = vol;
+				}
+				vol = (hb+lb)/2;
+				pnl = daily_delta_hedging_pnl(start,mat,mat,vol,strike);
+				i++;
+				if(i > 50)
+				{
+					return vol;
+				}
+			}
+		
+			//std::cout << "Final PnL is " << pnl <<std::endl;
+			//std::cout << "Final vol is " << vol <<std::endl;
+			
+			return vol;
 		}
-		
-		
-		while (std::abs(pnl) > tol)
+		else
 		{
-			if(pnl <0)
-			{
-				lb = vol;
-			}
-			else
-			{
-				hb = vol;
-			}
-			vol = (hb+lb)/2;
-			pnl = daily_delta_hedging_pnl(start,mat,vol,strike);
-			i++;
-			if(i > 50)
-			{
-				return vol;
-			}
+			std::cout<< "Invalid dates" << std::endl;
+			return get_volatility();
 		}
-		return vol;
 	}
 	
 	double option::get_BE_vol(struct std::tm start, double strike, double lb, double hb, double tol)
 	{
-		double vol = (hb+lb)/2;
-		double pnl = daily_delta_hedging_pnl(start,m_maturity,vol,strike);
-		int i=0;
-		pnl = daily_delta_hedging_pnl(start,m_maturity,lb,strike);
-		std::cout << "Pnl lb is " << pnl << std::endl;
-		pnl = daily_delta_hedging_pnl(start,m_maturity,hb,strike);
-		std::cout << "Pnl hb is " << pnl << std::endl;
-		double toto = daily_delta_hedging_pnl(start,m_maturity,lb,strike)*daily_delta_hedging_pnl(start,m_maturity,hb,strike);
-		if(toto>0)
+		struct std::tm mat = get_maturity();
+		return get_BE_vol(start, strike, mat,lb,hb,tol);
+	}
+	
+	double option::daily_delta_hedging_pnl_robust(struct std::tm start,struct std::tm mat)
+	{
+		double strike = get_strike();
+		double vol = get_volatility();
+		return daily_delta_hedging_pnl_robust(start,mat,mat, vol,strike);
+
+	}
+	double option::daily_delta_hedging_pnl_robust(struct std::tm start,struct std::tm end,struct std::tm mat,double vol,double strike)
+	{
+		double pnl = 0;
+		double TmT;
+		double dt;
+		std::vector<struct std::tm> dates = m_spot.get_dates();
+		double spot;
+		double r_vol;
+		double gamma = get_gamma(start,mat,vol,strike);
+		for(size_t i=m_spot.get_pos(start)+1;i<m_spot.get_pos(end);++i)
 		{
-				std::cout<< "Error" << std::endl;
+			TmT = time_diff(mat,dates[i])/365;
+			dt = time_diff(dates[i],dates[i-1])/365;
+			spot = m_spot[i-1];
+			r_vol= get_realized_vol(dates[i-1],dates[i]);
+			pnl+=  gamma * pow(spot,2) * (pow(r_vol,2) - pow(vol,2) * dt);
+			
+			if(TmT != 0)
+			{
+				gamma = get_gamma(dates[i],mat,vol,strike);
+			}
 		}
 		
+		return 0.5*pnl;
+	}
+	
+	double option::get_realized_vol(struct std::tm d1, struct std::tm d2)
+	{
+		return (m_spot[m_spot.get_pos(d1)]-m_spot[m_spot.get_pos(d2)])/m_spot[m_spot.get_pos(d2)];
+	}
+	
+	double option::get_BE_vol_robust(struct std::tm start, double strike, struct std::tm mat, double lb, double hb, double tol)
+	{
+		double vol = (hb+lb)/2;
+		double pnl = daily_delta_hedging_pnl_robust(start,mat,mat,vol,strike);
+		int i=0;
+		
+		double pnl_lb = daily_delta_hedging_pnl_robust(start,mat,mat,lb,strike);
+		double pnl_hb = daily_delta_hedging_pnl_robust(start,mat,mat,hb,strike);
+		
+		if(pnl_lb*pnl_hb>0)
+		{
+				std::cout<< "Error on lower and upper bounds for dichotomy method." << std::endl;
+		}
 		
 		while (std::abs(pnl) > tol)
 		{
-			if(pnl <0)
+			if(pnl >0)
 			{
 				lb = vol;
 			}
@@ -387,18 +469,19 @@ namespace BEV{
 				hb = vol;
 			}
 			vol = (hb+lb)/2;
-			pnl = daily_delta_hedging_pnl(start,m_maturity,vol,strike);
+			pnl = daily_delta_hedging_pnl_robust(start,mat,mat,vol,strike);
 			i++;
-			if(i > 50)
+			if(i > 20)
 			{
 				return vol;
 			}
 		}
-		std::cout<< "Pnl is "<< pnl << std::endl;
-		std::cout << "Vol is "<< vol << std::endl;
+		
+		//std::cout << "Final PnL is " << pnl <<std::endl;
+		//std::cout << "Final vol is " << vol <<std::endl;
+		
 		return vol;
 	}
-	
 	
 	/* Normal distribution methods */
 	

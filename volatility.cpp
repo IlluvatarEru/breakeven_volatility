@@ -34,45 +34,62 @@ namespace BEV{
 		}
 		
 		/* getters */
-		double volatility_surface::get_volatility(double strike, double maturity)
+		const std::vector<double>& volatility_surface::get_strikes() const
+		{
+			return m_strikes;
+		}
+		
+		const std::vector<double>& volatility_surface::get_maturities() const
+		{
+			return m_maturities;
+		}
+		
+		const std::vector<std::vector<double>>& volatility_surface::get_volatilities() const
+		{
+			return m_volatilities;
+		}
+		
+		double volatility_surface::get_volatility(double strike, double maturity) const
 		{
 			return get_volatility_from_index(get_pos_strike(strike),get_pos_maturity(maturity));
 		}
 		
-		double volatility_surface::get_volatility_from_index(std::size_t index1, std::size_t index2)
+		double volatility_surface::get_volatility_from_index(std::size_t index1, std::size_t index2) const
 		{
 			return m_volatilities[index1][index2];
 		}
 		
-		size_t volatility_surface::get_pos_strike(double strike)
+		size_t volatility_surface::get_pos_strike(double strike) const
 		{
-			int pos=-1;
+			size_t pos=0;
 			std::size_t nb = m_strikes.size();
-			size_t i=0;
-			while ((i< nb) && (pos<0))
+			size_t i = 0;
+			while ((i< nb) && (pos<=0))
 			{
 				if (m_strikes[i]==strike)
 				{
-					pos=i;
+					return i;;
 				}
 				i++;
 			}
+			std::cout << "V_surface: Element not found in strikes. First element returned" << std::endl;
 			return pos;
 		}
 		
-		size_t volatility_surface::get_pos_maturity(double maturity)
+		size_t volatility_surface::get_pos_maturity(double maturity) const
 		{
-			int pos=-1;
+			size_t pos=0;
 			std::size_t nb = m_maturities.size();
 			size_t i=0;
-			while ((i< nb) && (pos<0))
+			while ((i< nb) && (pos<=0))
 			{
 				if (m_maturities[i]==maturity)
 				{
-					pos=i;
+					return i;
 				}
 				i++;
 			}
+			std::cout << "V_surface: Element not found in maturities. First element returned" << std::endl;
 			return pos;
 		}
 		
@@ -121,27 +138,32 @@ namespace BEV{
 		}
 		
 		/* getters */
-		std::vector<double> volatility_skew::get_strikes()
+		const std::vector<double>& volatility_skew::get_strikes() const
 		{
 			return m_strikes;
 		}
 		
-		std::vector<double> volatility_skew::get_volatilities()
+		const std::vector<double>& volatility_skew::get_volatilities() const
 		{
 			return m_volatilities;
 		}
 		
-		double volatility_skew::get_volatility(size_t index)
+		double volatility_skew::get_maturity() const
+		{
+			return m_maturity;
+		}
+		
+		double volatility_skew::get_volatility(size_t index) const
 		{
 			return m_volatilities[index];
 		}
 
-		double volatility_skew::get_volatility(double strike)
+		double volatility_skew::get_volatility(double strike) const
 		{
 			return m_volatilities[get_pos(strike)];
 		}
 		
-		ptrdiff_t  volatility_skew::get_pos(double strike)
+		ptrdiff_t  volatility_skew::get_pos(double strike) const
 		{
 			ptrdiff_t pos = distance(m_strikes.begin(), find(m_strikes.begin(), m_strikes.end(), strike));
 			if(pos >= m_strikes.size())

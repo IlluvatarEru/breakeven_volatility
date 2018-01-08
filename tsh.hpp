@@ -20,6 +20,9 @@ namespace BEV
 	/* Method to substract two std:: tm variables */
 	double time_diff(struct std::tm& t1, struct std::tm& t2);
 	
+	/* Method to convert a string date to a tm object */
+	struct std::tm str_to_date(const std::string& date_str);
+	
 	/* Operators to comapre std::tm variables */
 	bool operator==(const struct std::tm& lhs, const struct std::tm& rhs);
 	bool operator>( struct std::tm& lhs, struct std::tm& rhs);
@@ -28,7 +31,6 @@ namespace BEV
 	
 	namespace TSH
 	{
-		struct std::tm str_to_tm(std::string date_string);
 		
 		/************************************************
 		************** Time Series Handler **************
@@ -43,16 +45,15 @@ namespace BEV
 				explicit tsh(std::string udl, std::ifstream& csvf);
 				explicit tsh::tsh(std::string udl,std::size_t l);
 				explicit tsh::tsh(std::string udl);
-				//explicit tsh::tsh(tsh& other_tsh);
 				virtual tsh::~tsh();
 				
 				/* getters */
-				std::string tsh::get_udl();
-				std::size_t tsh::get_size();
-				int tsh::get_pos(struct std::tm day);
-				std::vector<double> tsh::get_data();
-				std::vector<struct std::tm> tsh::get_dates();
-				struct std::tm tsh::get_date(size_t i);
+				std::string tsh::get_udl() const;
+				std::size_t tsh::get_size() const;
+				size_t tsh::get_pos(struct std::tm day) const;
+				const std::vector<double>& tsh::get_data() const;
+				const std::vector<struct std::tm>& tsh::get_dates() const;
+				struct std::tm tsh::get_date(size_t i) const;
 				double tsh::operator[](std::size_t i) const;
 				
 				/* setters */

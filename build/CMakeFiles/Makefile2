@@ -61,39 +61,39 @@ CMAKE_SOURCE_DIR = C:\Users\Arthur\Documents\Studies\ParisDauphineUniversity\Mas
 CMAKE_BINARY_DIR = C:\Users\Arthur\Documents\Studies\ParisDauphineUniversity\Master203\M2\cpp\project\build
 
 #=============================================================================
-# Target rules for target CMakeFiles/types_practice.dir
+# Target rules for target CMakeFiles/break_even_volatility.dir
 
 # All Build rule for target.
-CMakeFiles\types_practice.dir\all:
-	$(MAKE) -f CMakeFiles\types_practice.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\types_practice.dir\depend
-	$(MAKE) -f CMakeFiles\types_practice.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\types_practice.dir\build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=C:\Users\Arthur\Documents\Studies\ParisDauphineUniversity\Master203\M2\cpp\project\build\CMakeFiles --progress-num=1,2,3,4,5,6 "Built target types_practice"
-.PHONY : CMakeFiles\types_practice.dir\all
+CMakeFiles\break_even_volatility.dir\all:
+	$(MAKE) -f CMakeFiles\break_even_volatility.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\break_even_volatility.dir\depend
+	$(MAKE) -f CMakeFiles\break_even_volatility.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\break_even_volatility.dir\build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=C:\Users\Arthur\Documents\Studies\ParisDauphineUniversity\Master203\M2\cpp\project\build\CMakeFiles --progress-num=1,2,3,4,5,6 "Built target break_even_volatility"
+.PHONY : CMakeFiles\break_even_volatility.dir\all
 
 # Include target in all.
-all: CMakeFiles\types_practice.dir\all
+all: CMakeFiles\break_even_volatility.dir\all
 
 .PHONY : all
 
 # Build rule for subdir invocation for target.
-CMakeFiles\types_practice.dir\rule: cmake_check_build_system
+CMakeFiles\break_even_volatility.dir\rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Arthur\Documents\Studies\ParisDauphineUniversity\Master203\M2\cpp\project\build\CMakeFiles 6
-	$(MAKE) -f CMakeFiles\Makefile2 /nologo -$(MAKEFLAGS) CMakeFiles\types_practice.dir\all
+	$(MAKE) -f CMakeFiles\Makefile2 /nologo -$(MAKEFLAGS) CMakeFiles\break_even_volatility.dir\all
 	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Arthur\Documents\Studies\ParisDauphineUniversity\Master203\M2\cpp\project\build\CMakeFiles 0
-.PHONY : CMakeFiles\types_practice.dir\rule
+.PHONY : CMakeFiles\break_even_volatility.dir\rule
 
 # Convenience name for target.
-types_practice: CMakeFiles\types_practice.dir\rule
+break_even_volatility: CMakeFiles\break_even_volatility.dir\rule
 
-.PHONY : types_practice
-
-# clean rule for target.
-CMakeFiles\types_practice.dir\clean:
-	$(MAKE) -f CMakeFiles\types_practice.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\types_practice.dir\clean
-.PHONY : CMakeFiles\types_practice.dir\clean
+.PHONY : break_even_volatility
 
 # clean rule for target.
-clean: CMakeFiles\types_practice.dir\clean
+CMakeFiles\break_even_volatility.dir\clean:
+	$(MAKE) -f CMakeFiles\break_even_volatility.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\break_even_volatility.dir\clean
+.PHONY : CMakeFiles\break_even_volatility.dir\clean
+
+# clean rule for target.
+clean: CMakeFiles\break_even_volatility.dir\clean
 
 .PHONY : clean
 

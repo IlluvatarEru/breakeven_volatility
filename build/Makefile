@@ -112,17 +112,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named types_practice
+# Target rules for targets named break_even_volatility
 
 # Build rule for target.
-types_practice: cmake_check_build_system
-	$(MAKE) -f CMakeFiles\Makefile2 /nologo -$(MAKEFLAGS) types_practice
-.PHONY : types_practice
+break_even_volatility: cmake_check_build_system
+	$(MAKE) -f CMakeFiles\Makefile2 /nologo -$(MAKEFLAGS) break_even_volatility
+.PHONY : break_even_volatility
 
 # fast build rule for target.
-types_practice\fast:
-	$(MAKE) -f CMakeFiles\types_practice.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\types_practice.dir\build
-.PHONY : types_practice\fast
+break_even_volatility\fast:
+	$(MAKE) -f CMakeFiles\break_even_volatility.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\break_even_volatility.dir\build
+.PHONY : break_even_volatility\fast
 
 main.obj: main.cpp.obj
 
@@ -130,7 +130,7 @@ main.obj: main.cpp.obj
 
 # target to build an object file
 main.cpp.obj:
-	$(MAKE) -f CMakeFiles\types_practice.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\types_practice.dir\main.cpp.obj
+	$(MAKE) -f CMakeFiles\break_even_volatility.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\break_even_volatility.dir\main.cpp.obj
 .PHONY : main.cpp.obj
 
 main.i: main.cpp.i
@@ -139,7 +139,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	$(MAKE) -f CMakeFiles\types_practice.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\types_practice.dir\main.cpp.i
+	$(MAKE) -f CMakeFiles\break_even_volatility.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\break_even_volatility.dir\main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -148,7 +148,7 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	$(MAKE) -f CMakeFiles\types_practice.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\types_practice.dir\main.cpp.s
+	$(MAKE) -f CMakeFiles\break_even_volatility.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\break_even_volatility.dir\main.cpp.s
 .PHONY : main.cpp.s
 
 option.obj: option.cpp.obj
@@ -157,7 +157,7 @@ option.obj: option.cpp.obj
 
 # target to build an object file
 option.cpp.obj:
-	$(MAKE) -f CMakeFiles\types_practice.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\types_practice.dir\option.cpp.obj
+	$(MAKE) -f CMakeFiles\break_even_volatility.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\break_even_volatility.dir\option.cpp.obj
 .PHONY : option.cpp.obj
 
 option.i: option.cpp.i
@@ -166,7 +166,7 @@ option.i: option.cpp.i
 
 # target to preprocess a source file
 option.cpp.i:
-	$(MAKE) -f CMakeFiles\types_practice.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\types_practice.dir\option.cpp.i
+	$(MAKE) -f CMakeFiles\break_even_volatility.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\break_even_volatility.dir\option.cpp.i
 .PHONY : option.cpp.i
 
 option.s: option.cpp.s
@@ -175,7 +175,7 @@ option.s: option.cpp.s
 
 # target to generate assembly for a file
 option.cpp.s:
-	$(MAKE) -f CMakeFiles\types_practice.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\types_practice.dir\option.cpp.s
+	$(MAKE) -f CMakeFiles\break_even_volatility.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\break_even_volatility.dir\option.cpp.s
 .PHONY : option.cpp.s
 
 portfolio.obj: portfolio.cpp.obj
@@ -184,7 +184,7 @@ portfolio.obj: portfolio.cpp.obj
 
 # target to build an object file
 portfolio.cpp.obj:
-	$(MAKE) -f CMakeFiles\types_practice.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\types_practice.dir\portfolio.cpp.obj
+	$(MAKE) -f CMakeFiles\break_even_volatility.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\break_even_volatility.dir\portfolio.cpp.obj
 .PHONY : portfolio.cpp.obj
 
 portfolio.i: portfolio.cpp.i
@@ -193,7 +193,7 @@ portfolio.i: portfolio.cpp.i
 
 # target to preprocess a source file
 portfolio.cpp.i:
-	$(MAKE) -f CMakeFiles\types_practice.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\types_practice.dir\portfolio.cpp.i
+	$(MAKE) -f CMakeFiles\break_even_volatility.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\break_even_volatility.dir\portfolio.cpp.i
 .PHONY : portfolio.cpp.i
 
 portfolio.s: portfolio.cpp.s
@@ -202,7 +202,7 @@ portfolio.s: portfolio.cpp.s
 
 # target to generate assembly for a file
 portfolio.cpp.s:
-	$(MAKE) -f CMakeFiles\types_practice.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\types_practice.dir\portfolio.cpp.s
+	$(MAKE) -f CMakeFiles\break_even_volatility.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\break_even_volatility.dir\portfolio.cpp.s
 .PHONY : portfolio.cpp.s
 
 tsh.obj: tsh.cpp.obj
@@ -211,7 +211,7 @@ tsh.obj: tsh.cpp.obj
 
 # target to build an object file
 tsh.cpp.obj:
-	$(MAKE) -f CMakeFiles\types_practice.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\types_practice.dir\tsh.cpp.obj
+	$(MAKE) -f CMakeFiles\break_even_volatility.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\break_even_volatility.dir\tsh.cpp.obj
 .PHONY : tsh.cpp.obj
 
 tsh.i: tsh.cpp.i
@@ -220,7 +220,7 @@ tsh.i: tsh.cpp.i
 
 # target to preprocess a source file
 tsh.cpp.i:
-	$(MAKE) -f CMakeFiles\types_practice.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\types_practice.dir\tsh.cpp.i
+	$(MAKE) -f CMakeFiles\break_even_volatility.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\break_even_volatility.dir\tsh.cpp.i
 .PHONY : tsh.cpp.i
 
 tsh.s: tsh.cpp.s
@@ -229,7 +229,7 @@ tsh.s: tsh.cpp.s
 
 # target to generate assembly for a file
 tsh.cpp.s:
-	$(MAKE) -f CMakeFiles\types_practice.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\types_practice.dir\tsh.cpp.s
+	$(MAKE) -f CMakeFiles\break_even_volatility.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\break_even_volatility.dir\tsh.cpp.s
 .PHONY : tsh.cpp.s
 
 volatility.obj: volatility.cpp.obj
@@ -238,7 +238,7 @@ volatility.obj: volatility.cpp.obj
 
 # target to build an object file
 volatility.cpp.obj:
-	$(MAKE) -f CMakeFiles\types_practice.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\types_practice.dir\volatility.cpp.obj
+	$(MAKE) -f CMakeFiles\break_even_volatility.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\break_even_volatility.dir\volatility.cpp.obj
 .PHONY : volatility.cpp.obj
 
 volatility.i: volatility.cpp.i
@@ -247,7 +247,7 @@ volatility.i: volatility.cpp.i
 
 # target to preprocess a source file
 volatility.cpp.i:
-	$(MAKE) -f CMakeFiles\types_practice.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\types_practice.dir\volatility.cpp.i
+	$(MAKE) -f CMakeFiles\break_even_volatility.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\break_even_volatility.dir\volatility.cpp.i
 .PHONY : volatility.cpp.i
 
 volatility.s: volatility.cpp.s
@@ -256,7 +256,7 @@ volatility.s: volatility.cpp.s
 
 # target to generate assembly for a file
 volatility.cpp.s:
-	$(MAKE) -f CMakeFiles\types_practice.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\types_practice.dir\volatility.cpp.s
+	$(MAKE) -f CMakeFiles\break_even_volatility.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\break_even_volatility.dir\volatility.cpp.s
 .PHONY : volatility.cpp.s
 
 # Help Target
@@ -265,7 +265,7 @@ help:
 	@echo ... all (the default if no target is provided)
 	@echo ... clean
 	@echo ... depend
-	@echo ... types_practice
+	@echo ... break_even_volatility
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... main.obj

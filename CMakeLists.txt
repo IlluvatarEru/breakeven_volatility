@@ -27,5 +27,5 @@ set(TYPES_SRCS
 	portfolio.cpp
 	volatility.cpp)
 
-set(TYPES_TARGET types_practice)
+set(TYPES_TARGET break_even_volatility)
 add_executable(${TYPES_TARGET} ${TYPES_SRCS})

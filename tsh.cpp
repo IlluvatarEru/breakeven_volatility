@@ -30,18 +30,23 @@ namespace BEV
 		return std::difftime(std::mktime(&t1), std::mktime(&t2))/ 3600 / 24;
 	}
 	
+	/* Method to convert a string date to a tm object */
+	struct std::tm str_to_date(const std::string& date_str)
+	{
+		struct std::tm date;
+		
+		std::istringstream datestream(date_str);
+		datestream >> std::get_time(&date, "%d/%m/%Y");
+		
+		date.tm_hour=0;
+		date.tm_min=0;
+		date.tm_sec=0;
+		
+		return date;
+	}
+	
 	namespace TSH
 	{
-		struct std::tm str_to_tm(std::string date_string)
-		{
-			struct std::tm date_tm;
-			std::istringstream datestream(date_string);
-			datestream >> std::get_time(&date_tm, "%d/%m/%Y");
-			date_tm.tm_sec = 0;
-			date_tm.tm_min = 0;
-			date_tm.tm_hour = 0;
-			return date_tm;
-		}
 		
 		/************************************************
 		************** Time Series Handling *************
@@ -56,6 +61,8 @@ namespace BEV
 			m_dates.resize(size);
 			m_data.resize(size);
 			read_data(csvf);
+			
+			std::cout<<"tsh constructor"<<std::endl;
 		}
 		
 		tsh::tsh(std::string udl,std::size_t l)
@@ -63,6 +70,8 @@ namespace BEV
 		{
 			m_dates.resize(l);
 			m_data.resize(l);
+			
+			std::cout<<"tsh constructor"<<std::endl;
 		}
 		
 		tsh::tsh(std::string udl)
@@ -70,11 +79,9 @@ namespace BEV
 		{
 			m_dates.resize(1);
 			m_data.resize(1);
+			
+			std::cout<<"tsh constructor"<<std::endl;
 		}
-		
-		/*tsh::tsh(tsh& other_tsh)
-		: m_udl(other_tsh.get_udl()),m_dates(other_tsh.get_dates()),m_data(other_tsh.get_data())
-		{}*/
 		
 		tsh::~tsh()
 		{
@@ -83,44 +90,45 @@ namespace BEV
 		
 		/* getters */
 		
-		std::string tsh::get_udl()
+		std::string tsh::get_udl() const
 		{
 			return m_udl;
 		}
 		
-		std::size_t tsh::get_size()
+		std::size_t tsh::get_size() const
 		{
 			return m_data.size();
 		}
 		
-		std::vector<double> tsh::get_data()
+		const std::vector<double>& tsh::get_data() const
 		{
 			return m_data;
 		}
 		
-		std::vector<struct std::tm> tsh::get_dates()
+		const std::vector<struct std::tm>& tsh::get_dates() const
 		{
 			return m_dates;
 		}
 		
-		struct std::tm tsh::get_date(size_t i)
+		struct std::tm tsh::get_date(size_t i) const
 		{
 			return m_dates[i];
 		}
 		
-		int tsh::get_pos(struct std::tm day)
+		size_t tsh::get_pos(struct std::tm day) const
 		{
-			int pos=-1;
+			size_t pos=0;
 			std::size_t nb_inst = get_size();
 			int i=0;
-			while ((i< nb_inst) && (pos<0))
+			while ((i< nb_inst) && (pos<=0))
 			{
 				if (m_dates[i]==day)
 				{
-					pos=i;
+					return i;
 				}
 				i++;
 			}
+			std::cout << "TSH: Element not found. First element returned" << std::endl;
 			return pos;
 		}
 		
@@ -184,7 +192,11 @@ namespace BEV
 		bool tsh::is_in(struct std::tm day)
 		{
 			bool b=false;
-			if(get_pos(day)>=0)
+			if(get_pos(day)>0)
+			{
+				b=true;
+			}
+			if(m_dates[0]==day)
 			{
 				b=true;
 			}
