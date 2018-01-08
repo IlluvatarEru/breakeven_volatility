@@ -148,39 +148,9 @@ CMakeFiles\break_even_volatility.dir\tsh.cpp.obj.provides: CMakeFiles\break_even
 CMakeFiles\break_even_volatility.dir\tsh.cpp.obj.provides.build: CMakeFiles\break_even_volatility.dir\tsh.cpp.obj
 
 
-CMakeFiles\break_even_volatility.dir\portfolio.cpp.obj: CMakeFiles\break_even_volatility.dir\flags.make
-CMakeFiles\break_even_volatility.dir\portfolio.cpp.obj: ..\portfolio.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\Arthur\Documents\Studies\ParisDauphineUniversity\Master203\M2\cpp\project\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/break_even_volatility.dir/portfolio.cpp.obj"
-	C:\PROGRA~2\MIB055~1\2017\COMMUN~1\VC\Tools\MSVC\1411~1.255\bin\Hostx64\x64\cl.exe @<<
- /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoCMakeFiles\break_even_volatility.dir\portfolio.cpp.obj /FdCMakeFiles\break_even_volatility.dir\ /FS -c C:\Users\Arthur\Documents\Studies\ParisDauphineUniversity\Master203\M2\cpp\project\portfolio.cpp
-<<
-
-CMakeFiles\break_even_volatility.dir\portfolio.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/break_even_volatility.dir/portfolio.cpp.i"
-	C:\PROGRA~2\MIB055~1\2017\COMMUN~1\VC\Tools\MSVC\1411~1.255\bin\Hostx64\x64\cl.exe > CMakeFiles\break_even_volatility.dir\portfolio.cpp.i @<<
- /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\Arthur\Documents\Studies\ParisDauphineUniversity\Master203\M2\cpp\project\portfolio.cpp
-<<
-
-CMakeFiles\break_even_volatility.dir\portfolio.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/break_even_volatility.dir/portfolio.cpp.s"
-	C:\PROGRA~2\MIB055~1\2017\COMMUN~1\VC\Tools\MSVC\1411~1.255\bin\Hostx64\x64\cl.exe @<<
- /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoNUL /FAs /FaCMakeFiles\break_even_volatility.dir\portfolio.cpp.s /c C:\Users\Arthur\Documents\Studies\ParisDauphineUniversity\Master203\M2\cpp\project\portfolio.cpp
-<<
-
-CMakeFiles\break_even_volatility.dir\portfolio.cpp.obj.requires:
-
-.PHONY : CMakeFiles\break_even_volatility.dir\portfolio.cpp.obj.requires
-
-CMakeFiles\break_even_volatility.dir\portfolio.cpp.obj.provides: CMakeFiles\break_even_volatility.dir\portfolio.cpp.obj.requires
-	$(MAKE) -f CMakeFiles\break_even_volatility.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\break_even_volatility.dir\portfolio.cpp.obj.provides.build
-.PHONY : CMakeFiles\break_even_volatility.dir\portfolio.cpp.obj.provides
-
-CMakeFiles\break_even_volatility.dir\portfolio.cpp.obj.provides.build: CMakeFiles\break_even_volatility.dir\portfolio.cpp.obj
-
-
 CMakeFiles\break_even_volatility.dir\volatility.cpp.obj: CMakeFiles\break_even_volatility.dir\flags.make
 CMakeFiles\break_even_volatility.dir\volatility.cpp.obj: ..\volatility.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\Arthur\Documents\Studies\ParisDauphineUniversity\Master203\M2\cpp\project\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/break_even_volatility.dir/volatility.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\Arthur\Documents\Studies\ParisDauphineUniversity\Master203\M2\cpp\project\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/break_even_volatility.dir/volatility.cpp.obj"
 	C:\PROGRA~2\MIB055~1\2017\COMMUN~1\VC\Tools\MSVC\1411~1.255\bin\Hostx64\x64\cl.exe @<<
  /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoCMakeFiles\break_even_volatility.dir\volatility.cpp.obj /FdCMakeFiles\break_even_volatility.dir\ /FS -c C:\Users\Arthur\Documents\Studies\ParisDauphineUniversity\Master203\M2\cpp\project\volatility.cpp
 <<
@@ -213,7 +183,6 @@ break_even_volatility_OBJECTS = \
 "CMakeFiles\break_even_volatility.dir\main.cpp.obj" \
 "CMakeFiles\break_even_volatility.dir\option.cpp.obj" \
 "CMakeFiles\break_even_volatility.dir\tsh.cpp.obj" \
-"CMakeFiles\break_even_volatility.dir\portfolio.cpp.obj" \
 "CMakeFiles\break_even_volatility.dir\volatility.cpp.obj"
 
 # External object files for target break_even_volatility
@@ -222,11 +191,10 @@ break_even_volatility_EXTERNAL_OBJECTS =
 break_even_volatility.exe: CMakeFiles\break_even_volatility.dir\main.cpp.obj
 break_even_volatility.exe: CMakeFiles\break_even_volatility.dir\option.cpp.obj
 break_even_volatility.exe: CMakeFiles\break_even_volatility.dir\tsh.cpp.obj
-break_even_volatility.exe: CMakeFiles\break_even_volatility.dir\portfolio.cpp.obj
 break_even_volatility.exe: CMakeFiles\break_even_volatility.dir\volatility.cpp.obj
 break_even_volatility.exe: CMakeFiles\break_even_volatility.dir\build.make
 break_even_volatility.exe: CMakeFiles\break_even_volatility.dir\objects1.rsp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\Arthur\Documents\Studies\ParisDauphineUniversity\Master203\M2\cpp\project\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable break_even_volatility.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\Arthur\Documents\Studies\ParisDauphineUniversity\Master203\M2\cpp\project\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable break_even_volatility.exe"
 	"C:\Program Files\CMake\bin\cmake.exe" -E vs_link_exe --intdir=CMakeFiles\break_even_volatility.dir --manifests  -- C:\PROGRA~2\MIB055~1\2017\COMMUN~1\VC\Tools\MSVC\1411~1.255\bin\Hostx64\x64\link.exe /nologo @CMakeFiles\break_even_volatility.dir\objects1.rsp @<<
  /out:break_even_volatility.exe /implib:break_even_volatility.lib /pdb:C:\Users\Arthur\Documents\Studies\ParisDauphineUniversity\Master203\M2\cpp\project\build\break_even_volatility.pdb /version:0.0  /MANIFEST:NO /debug /INCREMENTAL /subsystem:console kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib 
 <<
@@ -239,7 +207,6 @@ CMakeFiles\break_even_volatility.dir\build: break_even_volatility.exe
 CMakeFiles\break_even_volatility.dir\requires: CMakeFiles\break_even_volatility.dir\main.cpp.obj.requires
 CMakeFiles\break_even_volatility.dir\requires: CMakeFiles\break_even_volatility.dir\option.cpp.obj.requires
 CMakeFiles\break_even_volatility.dir\requires: CMakeFiles\break_even_volatility.dir\tsh.cpp.obj.requires
-CMakeFiles\break_even_volatility.dir\requires: CMakeFiles\break_even_volatility.dir\portfolio.cpp.obj.requires
 CMakeFiles\break_even_volatility.dir\requires: CMakeFiles\break_even_volatility.dir\volatility.cpp.obj.requires
 
 .PHONY : CMakeFiles\break_even_volatility.dir\requires

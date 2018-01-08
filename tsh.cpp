@@ -45,6 +45,14 @@ namespace BEV
 		return date;
 	}
 	
+	std::string date_to_str(struct std::tm& date)
+	{
+		std::string str_date= std::to_string(date.tm_mday)+"/"
+								+std::to_string(date.tm_mon)+"/"
+								+std::to_string(1900+date.tm_year);
+		return str_date;
+	}
+	
 	namespace TSH
 	{
 		

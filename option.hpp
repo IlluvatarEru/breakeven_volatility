@@ -85,6 +85,7 @@ namespace BEV{
 			void option::set_delta_hedging(std::string hedge_type);
 			void option::set_maturity(struct std::tm maturity);
 			void option::set_volatility(double vol);
+			void option::set_strike(double strike);
 			
 			/* computers */
 			double option::compute_price(struct std::tm day, double vol);
@@ -100,7 +101,7 @@ namespace BEV{
 			double option::get_gamma(struct std::tm day,  struct std::tm mat, double vol, double strike);
 			
 			double option::get_rf_return(struct std::tm start,struct std::tm end);
-			double option::payoff(struct std::tm mat);
+			double option::payoff(struct std::tm mat,double strike);
 			
 			v_skew::volatility_skew option::get_volatility_skew(struct std::tm start, std::vector<double> strikes, std::string vol_type);
 			v_surface::volatility_surface option::get_volatility_surface(struct std::tm start, std::vector<double> strikes, std::vector<struct std::tm > maturities, std::string vol_type);

@@ -153,6 +153,10 @@ namespace BEV{
 			m_hedge_type = "unhedged";
 		}
 	}
+	void option::set_strike(double strike)
+	{
+		m_strike = strike;
+	}
 	
 	/* computers */
 	double option::compute_price(struct std::tm day)
@@ -208,30 +212,33 @@ namespace BEV{
 		double vol = get_volatility();
 		double strike = get_strike();
 		struct std::tm mat = get_maturity();
+		
 		return daily_delta_hedging_pnl(start,end,mat,vol,strike);
 	}
 	
 	double option::daily_delta_hedging_pnl(struct std::tm start, struct std::tm end, struct std::tm mat, double vol, double strike)
 	{	
-		double TmT = time_diff(mat,start);
+		double TmT = time_diff(mat,start)/365;
+		set_maturity(mat);
 		double pnl = compute_price(start,vol);
 		double pos_in_stock = get_delta(start,mat,vol,strike);
 		double pos_in_rf = pnl - get_spot(start) * pos_in_stock;
 		std::vector<struct std::tm> dates = m_spot.get_dates();
 		
-		for(size_t i=m_spot.get_pos(start)+1;i<m_spot.get_pos(end);++i)
+		
+		for(size_t i=m_spot.get_pos(start)+1;i<m_spot.get_pos(end)+1;++i)
 		{
-			TmT = time_diff(mat,dates[i]);
+			TmT = time_diff(mat,dates[i])/365;
 			
-			pnl+= pos_in_stock * (m_spot[i]-m_spot[i-1]) + pos_in_rf * (get_rf_return(dates[i],dates[i-1])-1);
+			pnl+= pos_in_stock * (m_spot[i]-m_spot[i-1]) + pos_in_rf * (get_rf_return(dates[i-1],dates[i])-1);
 			
 			if(TmT!=0)
 				pos_in_stock = get_delta(dates[i],mat,vol,strike);
-			
+
 			pos_in_rf = pnl- pos_in_stock * m_spot[i];
 		}
 		
-		return pnl - payoff(mat);
+		return pnl - payoff(mat,strike);
 	}
 	
 	double option::get_gamma(struct std::tm day,  struct std::tm mat, double vol, double strike)
@@ -279,15 +286,15 @@ namespace BEV{
 		}
 	}
 	
-	double option::payoff(struct std::tm mat)
+	double option::payoff(struct std::tm mat, double strike)
 	{
 		if(m_type=="Call")
 		{
-			return std::max(0.0, m_spot[m_spot.get_pos(mat)]-m_strike);
+			return std::max(0.0, m_spot[m_spot.get_pos(mat)]-strike);
 		}
 		else if(m_type=="Put")
 		{
-			return std::max(0.0, m_strike-m_spot[m_spot.get_pos(mat)]); 
+			return std::max(0.0, strike-m_spot[m_spot.get_pos(mat)]); 
 		}
 		else
 		{
@@ -314,18 +321,28 @@ namespace BEV{
 	v_surface::volatility_surface option::get_volatility_surface(struct std::tm start, std::vector<double> strikes, std::vector<struct std::tm > maturities, std::string vol_type)
 	{
 		std::vector<double> mat;
+		std::vector<struct std::tm> valid_mat;
 		for(size_t i=0; i< maturities.size(); ++i)
 		{
-			mat.push_back(time_diff(maturities[i],start)/365);
+			if(m_spot.is_in(maturities[i]))
+			{
+				mat.push_back(time_diff(maturities[i],start)/365);
+				valid_mat.push_back(maturities[i]);
+			}
+			else
+			{
+				std::cout << "Invalid Maturity" << std::endl;
+			}
 		}
+		
 		if(vol_type=="BE_vol")
 		{
-			std::vector<std::vector<double>> BE_vol = get_BE_vol(start, maturities, strikes);
+			std::vector<std::vector<double>> BE_vol = get_BE_vol(start, valid_mat, strikes);
 			return v_surface::volatility_surface(mat, strikes, BE_vol);
 		}
 		else
 		{
-			std::vector<std::vector<double>> constant_vol(strikes.size(), std::vector<double>(maturities.size(),m_volatility));
+			std::vector<std::vector<double>> constant_vol(strikes.size(), std::vector<double>(valid_mat.size(),m_volatility));
 			return v_surface::volatility_surface(mat, strikes,constant_vol);
 		}	
 	}
@@ -338,6 +355,7 @@ namespace BEV{
 			for(size_t i=0;i<strikes.size();++i)
 			{
 				vol[i][j] = get_BE_vol(start,strikes[i],maturities[j],lb,hb,tol);
+				//std::cout << "strike " << strikes[i] << ", Maturity " << date_to_str(maturities[j]) << ", Vol " << vol[i][j] <<std::endl;
 			}
 		}
 		return vol;
@@ -348,6 +366,7 @@ namespace BEV{
 		std::vector<double> vol(strikes.size(),0);
 		for(size_t i=0;i<strikes.size();++i)
 		{
+			set_strike(strikes[i]);
 			vol[i] = get_BE_vol(start,strikes[i],lb,hb,tol);
 		}
 		return vol;
@@ -357,16 +376,19 @@ namespace BEV{
 	{
 		if(m_spot.is_in(start) && m_spot.is_in(mat) && (start<mat))
 		{
+			struct std::tm end =m_spot.get_date(m_spot.get_pos(mat));
 			double vol = (hb+lb)/2;
-			double pnl = daily_delta_hedging_pnl(start,mat,mat,vol,strike);
+			double pnl = daily_delta_hedging_pnl(start,end,mat,vol,strike);
+			
 			int i=0;
 			
-			double pnl_lb = daily_delta_hedging_pnl(start,mat,mat,lb,strike);
-			double pnl_hb = daily_delta_hedging_pnl(start,mat,mat,hb,strike);
+			double pnl_lb = daily_delta_hedging_pnl(start,end,mat,lb,strike);
+			double pnl_hb = daily_delta_hedging_pnl(start,end,mat,hb,strike);
 			
 			if(pnl_lb*pnl_hb>0)
 			{
-					std::cout<< "Error on lower and upper bounds for dichotomy method." << std::endl;
+					std::cout<< "Error on lower and upper bounds vol P&Ls for dichotomy method." << std::endl;
+					return vol;
 			}
 			
 			while (std::abs(pnl) > tol)
@@ -380,7 +402,7 @@ namespace BEV{
 					hb = vol;
 				}
 				vol = (hb+lb)/2;
-				pnl = daily_delta_hedging_pnl(start,mat,mat,vol,strike);
+				pnl = daily_delta_hedging_pnl(start,end,mat,vol,strike);
 				i++;
 				if(i > 50)
 				{

@@ -24,7 +24,6 @@ set(TYPES_SRCS
     main.cpp
     option.cpp
 	tsh.cpp
-	portfolio.cpp
 	volatility.cpp)
 
 set(TYPES_TARGET break_even_volatility)

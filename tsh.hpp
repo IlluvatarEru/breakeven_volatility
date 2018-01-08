@@ -22,6 +22,7 @@ namespace BEV
 	
 	/* Method to convert a string date to a tm object */
 	struct std::tm str_to_date(const std::string& date_str);
+	std::string date_to_str(struct std::tm& date);
 	
 	/* Operators to comapre std::tm variables */
 	bool operator==(const struct std::tm& lhs, const struct std::tm& rhs);

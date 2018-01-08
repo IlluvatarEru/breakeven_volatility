@@ -2,7 +2,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/break_even_volatility.dir/main.cpp.obj"
   "CMakeFiles/break_even_volatility.dir/option.cpp.obj"
   "CMakeFiles/break_even_volatility.dir/tsh.cpp.obj"
-  "CMakeFiles/break_even_volatility.dir/portfolio.cpp.obj"
   "CMakeFiles/break_even_volatility.dir/volatility.cpp.obj"
   "break_even_volatility.pdb"
   "break_even_volatility.exe"

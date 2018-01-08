@@ -178,33 +178,6 @@ option.cpp.s:
 	$(MAKE) -f CMakeFiles\break_even_volatility.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\break_even_volatility.dir\option.cpp.s
 .PHONY : option.cpp.s
 
-portfolio.obj: portfolio.cpp.obj
-
-.PHONY : portfolio.obj
-
-# target to build an object file
-portfolio.cpp.obj:
-	$(MAKE) -f CMakeFiles\break_even_volatility.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\break_even_volatility.dir\portfolio.cpp.obj
-.PHONY : portfolio.cpp.obj
-
-portfolio.i: portfolio.cpp.i
-
-.PHONY : portfolio.i
-
-# target to preprocess a source file
-portfolio.cpp.i:
-	$(MAKE) -f CMakeFiles\break_even_volatility.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\break_even_volatility.dir\portfolio.cpp.i
-.PHONY : portfolio.cpp.i
-
-portfolio.s: portfolio.cpp.s
-
-.PHONY : portfolio.s
-
-# target to generate assembly for a file
-portfolio.cpp.s:
-	$(MAKE) -f CMakeFiles\break_even_volatility.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\break_even_volatility.dir\portfolio.cpp.s
-.PHONY : portfolio.cpp.s
-
 tsh.obj: tsh.cpp.obj
 
 .PHONY : tsh.obj
@@ -274,9 +247,6 @@ help:
 	@echo ... option.obj
 	@echo ... option.i
 	@echo ... option.s
-	@echo ... portfolio.obj
-	@echo ... portfolio.i
-	@echo ... portfolio.s
 	@echo ... tsh.obj
 	@echo ... tsh.i
 	@echo ... tsh.s
