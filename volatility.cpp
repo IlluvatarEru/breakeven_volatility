@@ -3,27 +3,96 @@
 
 namespace BEV{
 	
-	/************************************************
-	*************** Volatility Surface **************
-	*************************************************/
-	
-	/*
-	volatility_surface::volatility_surface(std::vector<double> maturities, std::vector<double> strikes, std::vector<double> volatilities)
-	: m_strikes(strikes), m_maturities(maturities), m_volatilities(volatilities)
+	namespace v_surface
 	{
-		std::cout<<"volatility_surface constructor"<<std::endl;
-	}
-	
-	volatility_surface::~volatility_surface()
-	{
-		std::cout<<"volatility_surface destructor"<<std::endl;
-	}
-	
-	double volatility_surface::get_volatility(size_t index) const //copy so no need of const
-	{
-		return m_volatilities[index];
-	}
-	*/
+		/************************************************
+		*************** Volatility Surface **************
+		*************************************************/
+		
+		
+		/* constructors and destructors */
+		
+		volatility_surface::volatility_surface(std::vector<double> maturities, std::vector<double> strikes, std::vector< std::vector<double> >  volatilities)
+		: m_strikes(strikes), m_maturities(maturities), m_volatilities(volatilities)
+		{
+			std::cout<<"volatility_surface constructor"<<std::endl;
+		}
+		
+		volatility_surface::volatility_surface(std::vector<double> maturities, std::vector<v_skew::volatility_skew> vs)
+		: m_maturities(maturities), m_strikes(vs[0].get_strikes())
+		{
+			for(size_t i=0; i<vs.size();++i)
+			{
+				m_volatilities.push_back(vs[i].get_volatilities());
+			}
+			std::cout<<"volatility_surface constructor"<<std::endl;
+		}
+		
+		volatility_surface::~volatility_surface()
+		{
+			std::cout<<"volatility_surface destructor"<<std::endl;
+		}
+		
+		/* getters */
+		double volatility_surface::get_volatility(double strike, double maturity)
+		{
+			return get_volatility_from_index(get_pos_strike(strike),get_pos_maturity(maturity));
+		}
+		
+		double volatility_surface::get_volatility_from_index(std::size_t index1, std::size_t index2)
+		{
+			return m_volatilities[index1][index2];
+		}
+		
+		size_t volatility_surface::get_pos_strike(double strike)
+		{
+			int pos=-1;
+			std::size_t nb = m_strikes.size();
+			size_t i=0;
+			while ((i< nb) && (pos<0))
+			{
+				if (m_strikes[i]==strike)
+				{
+					pos=i;
+				}
+				i++;
+			}
+			return pos;
+		}
+		
+		size_t volatility_surface::get_pos_maturity(double maturity)
+		{
+			int pos=-1;
+			std::size_t nb = m_maturities.size();
+			size_t i=0;
+			while ((i< nb) && (pos<0))
+			{
+				if (m_maturities[i]==maturity)
+				{
+					pos=i;
+				}
+				i++;
+			}
+			return pos;
+		}
+		
+		/* setters */
+		void volatility_surface::set_strikes(std::vector< double> strikes)
+		{
+			m_strikes = strikes;
+		}
+		
+		void volatility_surface::set_maturities(std::vector< double> maturities)
+		{
+			m_maturities = maturities;
+		}
+		
+		void volatility_surface::set_volatilities(std::vector< std::vector<double> > volatilities)
+		{
+			m_volatilities = volatilities;
+		}
+		
+	}		
 	
 	namespace v_skew
 	{
@@ -52,6 +121,15 @@ namespace BEV{
 		}
 		
 		/* getters */
+		std::vector<double> volatility_skew::get_strikes()
+		{
+			return m_strikes;
+		}
+		
+		std::vector<double> volatility_skew::get_volatilities()
+		{
+			return m_volatilities;
+		}
 		
 		double volatility_skew::get_volatility(size_t index)
 		{
@@ -78,16 +156,16 @@ namespace BEV{
 		{
 			m_volatilities = volatilities;
 		}
-		
-		/* computers */
-		
-		std::vector<double> volatility_skew::get_break_even_volatility()
+		void volatility_skew::set_strikes(std::vector< double> strikes)
 		{
-			std::vector<double> v(1,0);
-			return v;
+			m_strikes = strikes;
 		}
 		
-	
+		void volatility_skew::set_maturity(double maturity)
+		{
+			m_maturity = maturity;
+		}
+				
 	}
 	
 	

@@ -79,20 +79,23 @@ namespace BEV{
 			
 			/* setters */
 			void option::set_delta_hedging(std::string hedge_type);
+			void option::set_maturity(struct std::tm maturity);
 			
 			/* computers */
+			double option::compute_price(struct std::tm day, double vol);
 			double option::compute_price(struct std::tm day);
 			double option::delta_hedging_pnl(struct std::tm start, struct std::tm end);
 			double option::daily_delta_hedging_pnl(struct std::tm start, struct std::tm end);
 			double option::daily_delta_hedging_pnl(struct std::tm start, struct std::tm end, double vol, double strike);
-
 			double option::get_delta(struct std::tm day,double vol, double strike);
 			double option::get_rf_return(struct std::tm start,struct std::tm end);
-			double option::payoff(struct std::tm day);
-			
-			v_skew::volatility_skew option::get_volatility_skew(struct std::tm start, struct std::tm end, std::vector<double> strikes,std::string vol_type);
-			std::vector<double>  option::get_BE_vol(struct std::tm start, struct std::tm end, std::vector<double> strikes,double lb=0,double hb=1, double tol=1);
-			double option::get_BE_vol(struct std::tm start, struct std::tm end, double strike, double lb=0,double hb=1, double tol=100);
+			double option::payoff();
+			v_skew::volatility_skew option::get_volatility_skew(struct std::tm start, std::vector<double> strikes, std::string vol_type);
+			v_surface::volatility_surface option::get_volatility_surface(struct std::tm start, std::vector<double> strikes, std::vector<struct std::tm > maturities, std::string vol_type);
+			std::vector<double>  option::get_BE_vol(struct std::tm start, std::vector<double> strikes, double lb=0,double hb=1, double tol=10);
+			double option::get_BE_vol(struct std::tm start, double strike, double lb=0.0,double hb=1.0, double tol=10);
+			std::vector<std::vector<double>>  option::get_BE_vol(struct std::tm start, std::vector <struct std::tm > maturities, std::vector<double> strikes, double lb=0, double hb=1, double tol=10);
+			double option::get_BE_vol(struct std::tm start, double strike, struct std::tm mat, double lb=0, double hb=1, double tol=10);
 			
 		private:
 		

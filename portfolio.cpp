@@ -48,7 +48,7 @@ namespace BEV{
 		
 		v_skew::volatility_skew portfolio::get_skew(std::vector<double> strikes)
 		{
-			return m_option->get_volatility_skew(m_start,m_end,strikes,"BE_vol");
+			return m_option->get_volatility_skew(m_start,strikes,"BE_vol");
 		} 
 		
 		

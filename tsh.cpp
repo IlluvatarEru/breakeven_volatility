@@ -24,7 +24,7 @@ namespace BEV
 		return (time_diff(lhs,rhs)<=0);
 	}
 	
-	/* Method to substract two std:: tm variables */
+	/* Method to substract two std:: tm variables get a result in days */
 	double time_diff(struct std::tm& t1, struct std::tm& t2)
 	{
 		return std::difftime(std::mktime(&t1), std::mktime(&t2))/ 3600 / 24;
@@ -184,7 +184,7 @@ namespace BEV
 		bool tsh::is_in(struct std::tm day)
 		{
 			bool b=false;
-			if(get_pos(day)>0)
+			if(get_pos(day)>=0)
 			{
 				b=true;
 			}
