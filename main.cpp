@@ -13,14 +13,14 @@ namespace BEV{
 			int vsize = v1.size();
 			for(int n=0; n<vsize; n++)
 			{
-				myfile << v1[n] << '\t';
+				myfile << v1[n];
 				myfile << "," ;
 			}
 			myfile << std::endl;
 			vsize = v2.size();
 			for(int n=0; n<vsize; n++)
 			{
-				myfile << v2[n] << '\t';
+				myfile << v2[n];
 				myfile << "," ;
 			}
 
@@ -35,7 +35,7 @@ namespace BEV{
 			{
 				for(int m=0; m<vsize_t; m++)
 				{
-					myfile << v1[n];// << '\t';
+					myfile << v1[n];
 					myfile << "," ;
 				}
 			}
@@ -44,7 +44,7 @@ namespace BEV{
 			{
 				for(int m=0; m<vsize_t; m++)
 				{
-					myfile << v2[n];// << '\t';
+					myfile << v2[n];
 					myfile << "," ;
 				}
 			}
@@ -53,7 +53,7 @@ namespace BEV{
 			{
 				for(int m=0;m<vsize_t;m++)
 				{
-					myfile << v3[n][m];// << '\t';
+					myfile << v3[n][m];
 					myfile << "," ;
 				}
 			}
@@ -73,10 +73,10 @@ int main(int artc, char* argv[]){
 	MyCSV.close();
 	
 	// Define start date
-	struct std::tm start = BEV::str_to_date("02/06/2015");
+	struct std::tm start = BEV::str_to_date("02/01/2015");
 	
 	// Define maturity at 1 y from start
-	struct std::tm T =  BEV::str_to_date("24/08/2016");
+	struct std::tm T =  BEV::str_to_date("04/01/2016");
 	
 	// Let us define a 1 year maturity option with some parameters
 	double K = 2100 ;
@@ -97,9 +97,9 @@ int main(int artc, char* argv[]){
 	
 	
 	//Define ranges of maturities and strikes and compute volatility skew and surface
-	std::vector<double> strikes = {1800,2000,2200};
-	std::vector<struct std::tm> mat ={BEV::str_to_date("02/11/2015"),BEV::str_to_date("02/06/2016"),BEV::str_to_date("02/06/2017")};
-	std::vector<std::string> mat_str = {"02/11/2015","02/06/2016","02/06/2017"};
+	std::vector<double> strikes = {1950,2000,2050};
+	std::vector<struct std::tm> mat ={BEV::str_to_date("02/06/2015"),BEV::str_to_date("02/11/2016"),BEV::str_to_date("04/01/2016")};
+	std::vector<std::string> mat_str = {"02/06/2015","02/11/2015","04/01/2016"};
 	
 	BEV::v_skew::volatility_skew v1 = Call.get_volatility_skew(start, strikes, "BE_vol");
 	std::string f ="Skew";

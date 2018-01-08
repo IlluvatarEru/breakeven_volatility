@@ -355,7 +355,7 @@ namespace BEV{
 			for(size_t i=0;i<strikes.size();++i)
 			{
 				vol[i][j] = get_BE_vol(start,strikes[i],maturities[j],lb,hb,tol);
-				//std::cout << "strike " << strikes[i] << ", Maturity " << date_to_str(maturities[j]) << ", Vol " << vol[i][j] <<std::endl;
+				std::cout << "strike " << strikes[i] << ", Maturity " << date_to_str(maturities[j]) << ", Vol " << vol[i][j] <<std::endl;
 			}
 		}
 		return vol;
@@ -388,7 +388,7 @@ namespace BEV{
 			if(pnl_lb*pnl_hb>0)
 			{
 					std::cout<< "Error on lower and upper bounds vol P&Ls for dichotomy method." << std::endl;
-					return vol;
+					return m_volatility;
 			}
 			
 			while (std::abs(pnl) > tol)
@@ -478,6 +478,7 @@ namespace BEV{
 		if(pnl_lb*pnl_hb>0)
 		{
 				std::cout<< "Error on lower and upper bounds for dichotomy method." << std::endl;
+				return m_volatility;
 		}
 		
 		while (std::abs(pnl) > tol)
